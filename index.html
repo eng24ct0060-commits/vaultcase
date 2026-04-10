@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VaultCase - Premium Rare Item Auctions</title>
+  
+  <!-- Modern Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
+  
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Canvas Confetti for celebrations -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <link rel="stylesheet" href="index.css">
+</head>
+<body>
+
+  <!-- Ambient Background -->
+  <div class="ambient-bg">
+    <div class="glow-orb orb-1"></div>
+    <div class="glow-orb orb-2"></div>
+    <div class="glow-orb orb-3"></div>
+  </div>
+
+  <header class="glass-header">
+    <div class="logo">
+      <i class="fa-solid fa-gem"></i> Vault<span>Case</span>
+    </div>
+    <nav class="nav-links">
+      <a href="#" class="active">Discover</a>
+      <a href="#">Auctions</a>
+      <a href="#">Sell</a>
+    </nav>
+    <div class="auth-buttons">
+      <button class="btn btn-outline" onclick="openLogin()">Sign In</button>
+      <button class="btn btn-primary" onclick="openRegister()">Register</button>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="hero-content fade-in">
+      <span class="badge">Exclusive Collectibles</span>
+      <h1>Unearth the <br/><span class="text-gradient">Extraordinary</span></h1>
+      <p>Enter the premier destination for bidding on rare artifacts, vintage jerseys, and ancient history. Your next masterpiece awaits.</p>
+      <div class="hero-actions">
+        <button class="btn btn-glow btn-lg" onclick="scrollToItems()">Explore Auctions <i class="fa-solid fa-arrow-right"></i></button>
+      </div>
+    </div>
+  </section>
+
+  <section class="filters-container">
+    <div class="search-box">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <input type="text" id="searchInput" placeholder="Search for rare items..." onkeyup="filterItems()">
+    </div>
+  </section>
+
+  <section class="items" id="auction-grid">
+    <!-- Card 1 -->
+    <div class="card glass-card" data-title="Signed Football Jersey">
+      <div class="card-image-wrapper">
+        <img src="https://images.unsplash.com/photo-1517649763962-0c623066013b" alt="Signed Jersey" loading="lazy">
+        <div class="time-badge"><i class="fa-regular fa-clock"></i> <span id="timer1">120</span>s</div>
+      </div>
+      <div class="card-content">
+        <h3>Signed Football Jersey</h3>
+        <div class="bid-stats">
+          <div class="stat">
+            <span class="label">Current Bid</span>
+            <span class="value text-gold">₹<span id="bid1">15000</span></span>
+          </div>
+          <div class="stat right">
+            <span class="label">Bids Placed</span>
+            <span class="value"><span id="bids1">0</span></span>
+          </div>
+        </div>
+        <div class="action-group">
+          <button class="btn btn-primary w-full" id="btn-bid1" onclick="placeBid('1')"><i class="fa-solid fa-gavel"></i> Place Bid</button>
+          <button class="btn btn-secondary icon-only" onclick="showHistory('1')" title="View History"><i class="fa-solid fa-clock-rotate-left"></i></button>
+        </div>
+        <div id="winner1" class="winner-message"></div>
+      </div>
+    </div>
+
+    <!-- Card 2 -->
+    <div class="card glass-card" data-title="Ancient Coin">
+      <div class="card-image-wrapper">
+        <img src="coin.jfif" alt="Ancient Coin" loading="lazy">
+        <div class="time-badge"><i class="fa-regular fa-clock"></i> <span id="timer2">45</span>s</div>
+      </div>
+      <div class="card-content">
+        <h3>Rare Ancient Coin</h3>
+        <div class="bid-stats">
+          <div class="stat">
+            <span class="label">Current Bid</span>
+            <span class="value text-gold">₹<span id="bid2">8500</span></span>
+          </div>
+          <div class="stat right">
+            <span class="label">Bids Placed</span>
+            <span class="value"><span id="bids2">0</span></span>
+          </div>
+        </div>
+        <div class="action-group">
+          <button class="btn btn-primary w-full" id="btn-bid2" onclick="placeBid('2')"><i class="fa-solid fa-gavel"></i> Place Bid</button>
+          <button class="btn btn-secondary icon-only" onclick="showHistory('2')" title="View History"><i class="fa-solid fa-clock-rotate-left"></i></button>
+        </div>
+        <div id="winner2" class="winner-message"></div>
+      </div>
+    </div>
+
+    <!-- Card 3 -->
+    <div class="card glass-card" data-title="Vintage Watch">
+      <div class="card-image-wrapper">
+        <img src="download (1).jfif" onerror="this.src='https://images.unsplash.com/photo-1522312346375-d1a52e2b99b3'" alt="Vintage Watch" loading="lazy">
+        <div class="time-badge"><i class="fa-regular fa-clock"></i> <span id="timer3">90</span>s</div>
+      </div>
+      <div class="card-content">
+        <h3>Rolex Vintage Watch</h3>
+        <div class="bid-stats">
+          <div class="stat">
+            <span class="label">Current Bid</span>
+            <span class="value text-gold">₹<span id="bid3">22000</span></span>
+          </div>
+          <div class="stat right">
+            <span class="label">Bids Placed</span>
+            <span class="value"><span id="bids3">0</span></span>
+          </div>
+        </div>
+        <div class="action-group">
+          <button class="btn btn-primary w-full" id="btn-bid3" onclick="placeBid('3')"><i class="fa-solid fa-gavel"></i> Place Bid</button>
+          <button class="btn btn-secondary icon-only" onclick="showHistory('3')" title="View History"><i class="fa-solid fa-clock-rotate-left"></i></button>
+        </div>
+        <div id="winner3" class="winner-message"></div>
+      </div>
+    </div>
+
+    <!-- Card 4 -->
+    <div class="card glass-card" data-title="Rare Painting">
+      <div class="card-image-wrapper">
+        <img src="download.jfif" onerror="this.src='https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5'" alt="Rare Painting" loading="lazy">
+        <div class="time-badge"><i class="fa-regular fa-clock"></i> <span id="timer4">150</span>s</div>
+      </div>
+      <div class="card-content">
+        <h3>Masterpiece Painting</h3>
+        <div class="bid-stats">
+          <div class="stat">
+            <span class="label">Current Bid</span>
+            <span class="value text-gold">₹<span id="bid4">50000</span></span>
+          </div>
+          <div class="stat right">
+            <span class="label">Bids Placed</span>
+            <span class="value"><span id="bids4">0</span></span>
+          </div>
+        </div>
+        <div class="action-group">
+          <button class="btn btn-primary w-full" id="btn-bid4" onclick="placeBid('4')"><i class="fa-solid fa-gavel"></i> Place Bid</button>
+          <button class="btn btn-secondary icon-only" onclick="showHistory('4')" title="View History"><i class="fa-solid fa-clock-rotate-left"></i></button>
+        </div>
+        <div id="winner4" class="winner-message"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container"></div>
+
+  <!-- Modals -->
+  <div id="loginModal" class="modal">
+    <div class="modal-glass">
+      <span class="close" onclick="closeLogin()">&times;</span>
+      <div class="modal-header">
+        <h2>Welcome Back</h2>
+        <p>Sign in to continue your secure vault access.</p>
+      </div>
+      <div class="input-group">
+        <i class="fa-solid fa-user"></i>
+        <input type="text" placeholder="Username">
+      </div>
+      <div class="input-group">
+        <i class="fa-solid fa-lock"></i>
+        <input type="password" placeholder="Password">
+      </div>
+      <button class="btn btn-primary btn-glow w-full mt-4">Authenticate</button>
+      <p class="modal-footer">Don't have an account? <a href="#" onclick="openRegister();closeLogin();return false;">Create one</a></p>
+    </div>
+  </div>
+
+  <div id="registerModal" class="modal">
+    <div class="modal-glass">
+      <span class="close" onclick="closeRegister()">&times;</span>
+      <div class="modal-header">
+        <h2>Join VaultCase</h2>
+        <p>Gain access to exclusive auctions worldwide.</p>
+      </div>
+      <div class="input-group">
+        <i class="fa-solid fa-user"></i>
+        <input type="text" placeholder="Choose Username">
+      </div>
+      <div class="input-group">
+        <i class="fa-solid fa-envelope"></i>
+        <input type="email" placeholder="Email Address">
+      </div>
+      <div class="input-group">
+        <i class="fa-solid fa-lock"></i>
+        <input type="password" placeholder="Create Password">
+      </div>
+      <button class="btn btn-primary btn-glow w-full mt-4">Register Account</button>
+      <p class="modal-footer">Already a member? <a href="#" onclick="openLogin();closeRegister();return false;">Sign in</a></p>
+    </div>
+  </div>
+
+  <div id="historyModal" class="modal">
+    <div class="modal-glass wide-modal">
+      <span class="close" onclick="closeHistory()">&times;</span>
+      <div class="modal-header">
+        <h2><i class="fa-solid fa-list"></i> Bidding History</h2>
+      </div>
+      <div class="history-list-wrapper">
+        <ul id="historyList"></ul>
+      </div>
+    </div>
+  </div>
+
+  <footer class="glass-footer">
+    <div class="footer-content">
+      <div class="logo">
+        <i class="fa-solid fa-gem"></i> Vault<span>Case</span>
+      </div>
+      <p>Premium auction house for the extraordinary.</p>
+      <div class="socials">
+        <i class="fa-brands fa-twitter"></i>
+        <i class="fa-brands fa-instagram"></i>
+        <i class="fa-brands fa-discord"></i>
+      </div>
+    </div>
+    <div class="copyright">© 2026 VaultCase Inc. All rights reserved.</div>
+  </footer>
+
+  <script src="index.js"></script>
+</body>
+</html>
