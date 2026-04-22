@@ -1,23 +1,2 @@
-pipeline {
-    agent any
 
-    stages {
-        stage('Clone') {
-            steps {
-                git 'https://github.com/eng24ct0060-commits/vaultcase.git'
-            }
-        }
-
-        stage('Build') {
-            steps {
-                echo "Building project..."
-            }
-        }
-
-        stage('Deploy') {
-            steps {
-                echo "Deploying to server..."
-            }
-        }
-    }
-}
+pipeline {   agent any   stages {   stage('Build Docker Image') {   steps { sh 'docker build -t devops-demo:v1 .' }   }   stage('Deploy Container') {   steps { sh '''   docker ps -q | xargs -r docker stop   docker ps -aq | xargs -r docker rm   docker run -d -p 80:3000 devops-demo:v1   ''' }   }   }  } 
