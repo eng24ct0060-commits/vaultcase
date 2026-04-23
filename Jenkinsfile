@@ -20,12 +20,6 @@ pipeline {
             }
         }
 
-        stage('Build Docker Image') {
-            steps {
-                sh 'docker build -t vaultcase .'
-            }
-        }
-
         stage('Test') {
             steps {
                 sh 'npm run test'  // Assuming you have tests; adjust if not
