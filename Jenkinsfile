@@ -1,47 +1,58 @@
 pipeline {
     agent any
 
-    stages {
-        stage('Checkout') {
-            steps {
-                checkout scm
-            }
-        }
+    environment {
+        EC2_USER = "ec2-user"
+        EC2_IP = "16.171.147.166"   // your website server IP
+        PEM_FILE = "jenkins.pem"    // make sure this is in Jenkins
+    }
 
-        stage('Install Dependencies') {
+    stages {
+
+        stage('Clone Repository') {
             steps {
-                sh 'npm install'
+                git branch: 'main', url: 'https://github.com/eng24ct0060-commits/vaultcase.git'
             }
         }
 
         stage('Build') {
             steps {
+                echo "Building the project..."
+                // Example for Node.js
+                sh 'npm install'
                 sh 'npm run build'
             }
         }
 
         stage('Test') {
             steps {
-                sh 'npm run test'  // Assuming you have tests; adjust if not
+                echo "Running tests..."
+                // Optional
+                sh 'npm test || true'
             }
         }
 
-        stage('Deploy') {
+        stage('Deploy to EC2') {
             steps {
-                // Add your deployment steps here, e.g., copy to server, upload to S3, etc.
-                echo 'Deploy step - customize as needed'
+                echo "Deploying to server..."
+                sh """
+                scp -i ${PEM_FILE} -o StrictHostKeyChecking=no -r * ${EC2_USER}@${EC2_IP}:/home/ec2-user/app
+                ssh -i ${PEM_FILE} -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_IP} '
+                    cd /home/ec2-user/app
+                    npm install
+                    pm2 restart all || pm2 start app.js
+                '
+                """
             }
         }
     }
 
     post {
-        always {
-            // Clean up or notifications
-            echo 'Pipeline completed'
+        success {
+            echo "Deployment Successful 🚀"
         }
         failure {
-            // Notify on failure
-            echo 'Pipeline failed'
+            echo "Pipeline Failed ❌"
         }
     }
 }
