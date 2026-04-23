@@ -1,48 +1,53 @@
 pipeline {
     agent any
 
-    environment {
-        IMAGE_NAME = "devops-demo"
-        IMAGE_TAG = "v1"
-        CONTAINER_NAME = "devops-container"
-    }
-
     stages {
-
-        stage('Clone Repository') {
+        stage('Checkout') {
             steps {
-                git url: 'https://github.com/eng24ct0060-commits/vaultcase.git', branch: 'main'
+                checkout scm
+            }
+        }
+
+        stage('Install Dependencies') {
+            steps {
+                sh 'npm install'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                sh 'npm run build'
             }
         }
 
         stage('Build Docker Image') {
             steps {
-                sh "docker build -t ${IMAGE_NAME}:${IMAGE_TAG} ."
+                sh 'docker build -t vaultcase .'
             }
         }
 
-        stage('Stop & Remove Old Container') {
+        stage('Test') {
             steps {
-                sh '''
-                docker stop ${CONTAINER_NAME} || true
-                docker rm ${CONTAINER_NAME} || true
-                '''
+                sh 'npm run test'  // Assuming you have tests; adjust if not
             }
         }
 
-        stage('Run New Container') {
+        stage('Deploy') {
             steps {
-                sh "docker run -d -p 80:3000 --name ${CONTAINER_NAME} ${IMAGE_NAME}:${IMAGE_TAG}"
+                // Add your deployment steps here, e.g., copy to server, upload to S3, etc.
+                echo 'Deploy step - customize as needed'
             }
         }
     }
 
     post {
-        success {
-            echo "✅ Deployment Successful!"
+        always {
+            // Clean up or notifications
+            echo 'Pipeline completed'
         }
         failure {
-            echo "❌ Deployment Failed!"
+            // Notify on failure
+            echo 'Pipeline failed'
         }
     }
 }
