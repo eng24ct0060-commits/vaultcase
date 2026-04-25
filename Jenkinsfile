@@ -1,3 +1,4 @@
+
 pipeline {
     agent any
 
@@ -11,12 +12,14 @@ pipeline {
         stage('Build') {
             steps {
                 echo "Building..."
+                // add build commands here (mvn, npm, gradle, etc.)
             }
         }
 
         stage('Deploy') {
             steps {
                 echo "Deploying..."
+                // add deployment commands here
             }
         }
     }
