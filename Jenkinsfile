@@ -2,42 +2,28 @@ pipeline {
     agent any
 
     environment {
-        IMAGE_NAME = "vaultcase-app:v1"
-        CONTAINER_NAME = "vaultcase-container"
+        IMAGE_NAME = 'vaultcase-app'
+        CONTAINER_NAME = 'vaultcase-container'
     }
 
     stages {
 
-        stage('Clone Repository') {
-    steps {
-        git branch: 'main',
-            url: 'https://github.com/eng24ct0060-commits/vaultcase.git'
-    }
-}
-
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t $IMAGE_NAME .'
+                sh 'docker build -t $IMAGE_NAME:v1 .'
             }
         }
 
         stage('Stop & Remove Old Container') {
             steps {
-                sh '''
-                docker ps -q --filter "name=$CONTAINER_NAME" | xargs -r docker stop
-                docker ps -aq --filter "name=$CONTAINER_NAME" | xargs -r docker rm
-                '''
+                sh 'docker stop $CONTAINER_NAME || true'
+                sh 'docker rm $CONTAINER_NAME || true'
             }
         }
 
         stage('Run Container') {
             steps {
-                sh '''
-                docker run -d \
-                --name $CONTAINER_NAME \
-                -p 80:3000 \
-                $IMAGE_NAME
-                '''
+                sh 'docker run -d -p 80:80 --name $CONTAINER_NAME $IMAGE_NAME:v1'
             }
         }
     }
