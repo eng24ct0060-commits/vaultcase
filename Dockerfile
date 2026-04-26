@@ -4,17 +4,20 @@ FROM node:18-alpine
 # Create app directory
 WORKDIR /app
 
-# Copy package files first (for caching)
+# Copy package.json and package-lock.json
 COPY package*.json ./
 
 # Install dependencies
 RUN npm install
 
-# Copy remaining source code
+# Copy rest of the application
 COPY . .
 
-# Expose app port (change if needed)
+# Build app (only if needed, e.g., React)
+RUN npm run build || true
+
+# Expose port
 EXPOSE 3000
 
-# Start the app
-CMD ["npm", "run", "start"]
+# Start application
+CMD ["npm", "start"]
