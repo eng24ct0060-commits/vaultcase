@@ -9,10 +9,11 @@ pipeline {
     stages {
 
         stage('Clone Repository') {
-            steps {
-                git 'https://github.com/eng24ct0060-commits/vaultcase.git'
-            }
-        }
+    steps {
+        git branch: 'main',
+            url: 'https://github.com/eng24ct0060-commits/vaultcase.git'
+    }
+}
 
         stage('Build Docker Image') {
             steps {
