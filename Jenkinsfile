@@ -1,48 +1,43 @@
 pipeline {
     agent any
 
-    stages {
-        stage('Clone Repository') {
-            steps {
-                git branch: 'main', 
-                    url: 'https://github.com/eng24ct0060-commits/vaultcase.git'
-            }
-        }
-
-        stage('Build') {
-            steps {
-                echo 'Building the project...'
-                // Example:
-                // sh 'npm install'
-                // sh 'mvn clean install'
-            }
-        }
-
-        stage('Test') {
-            steps {
-                echo 'Running tests...'
-                // Example:
-                // sh 'npm test'
-            }
-        }
-
-        stage('Deploy') {
-            steps {
-                echo 'Deploying application...'
-                // Add deploy commands if needed
-            }
-        }
+    environment {
+        IMAGE_NAME = "vaultcase-app:v1"
+        CONTAINER_NAME = "vaultcase-container"
     }
 
-    post {
-        always {
-            echo 'Pipeline completed.'
+    stages {
+
+        stage('Clone Repository') {
+            steps {
+                git 'https://github.com/eng24ct0060-commits/vaultcase.git'
+            }
         }
-        success {
-            echo 'Build successful!'
+
+        stage('Build Docker Image') {
+            steps {
+                sh 'docker build -t $IMAGE_NAME .'
+            }
         }
-        failure {
-            echo 'Build failed!'
+
+        stage('Stop & Remove Old Container') {
+            steps {
+                sh '''
+                docker ps -q --filter "name=$CONTAINER_NAME" | xargs -r docker stop
+                docker ps -aq --filter "name=$CONTAINER_NAME" | xargs -r docker rm
+                '''
+            }
+        }
+
+        stage('Run Container') {
+            steps {
+                sh '''
+                docker run -d \
+                --name $CONTAINER_NAME \
+                -p 80:3000 \
+                $IMAGE_NAME
+                '''
+            }
         }
     }
 }
